@@ -58,16 +58,17 @@ def fill_xlsx(
                 # If the cell value is a string, and contains a placeholder (e.g., '{{A}}')
                 if isinstance(cell.value, str) and '{{' in cell.value:
                     # Extract the placeholder (e.g., 'A')
-                    key = cell.value.strip('{}')
+                    key = remove_after(
+                        remove_before(cell.value, '{{'), 
+                        "}}"
+                    ).strip('{}')
                     # If the placeholder can be found in the data, replace the placeholder with the corresponding data
                     if key in data:     
                         if is_only_placeholder(cell.value):
-                            print(f'**{cell.value}**')
                             cell.value = data[key] 
                         else:          
                             placeholder =  '{{' + key + '}}'
-                            cell_value = str(cell.value)  
-                            print(f'**{cell_value}**')      
+                            cell_value = str(cell.value)       
                             cell.value = cell_value.replace(placeholder, str(data[key]))
 
     # Save the result file
@@ -75,6 +76,37 @@ def fill_xlsx(
 
 
 
+def remove_before(s:str, spec:str):
+    """
+    Returns a new string with all characters removed before 'spec'
+    :param s: The original string
+    :param spec: The specific character
+    """
+    # Find the index of 'spec' in 's'
+    idx = s.find(spec)
+
+    # If 'spec' is not found in 's', return the original string
+    if idx == -1:
+        return s
+
+    # If 'spec' is found, return the part of 's' from 'spec' to the end
+    return s[idx:]
+    
+def remove_after(s: str, spec: str)->str:
+    """
+    Return a new string removed all chars after spec
+    :param s: The original string
+    :param spec: The specific char
+    """
+    # Find the index of spec in s
+    idx = s.find(spec)
+
+    # If spec is not found in s, return the original string
+    if idx == -1:
+        return s
+
+    # Otherwise, return the part of s before and including spec
+    return s[:idx + len(spec)]
 
 def is_only_placeholder(s: str) -> bool:
     """
@@ -95,14 +127,7 @@ def is_only_placeholder(s: str) -> bool:
     return match is not None        # If there is a match, the string is a placeholder, return True, otherwise, False
 
 if __name__=="__main__":
-    # import doctest
-    # doctest.testmod()
+    import doctest
+    doctest.testmod()
 
-    data = {
-        "标题": "测试用标题", 
-        "编号": 1,
-        "姓名": "张三", 
-        "性别": "男",
-        "年龄": 15
-    }
-    fill_xlsx(data, template="d:/dev/filler/src/test/模板.xlsx", full_path="d:/dev/filler/src/test/out.xlsx")
+    
