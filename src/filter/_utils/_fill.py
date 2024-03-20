@@ -74,8 +74,6 @@ def fill_xlsx(
     # Save the result file
     book.save(full_path)
 
-
-
 def remove_before(s:str, spec:str):
     """
     Returns a new string with all characters removed before 'spec'
