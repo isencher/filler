@@ -4,6 +4,7 @@ __all__ = [
     "FillDataCollectionTypeError",
     "FillDataCollectionEmptyError",
     "FillTemplateTypeError",
+    "FillTemplateNotExistError",
     "FillOutputDirError",
 ]
 
@@ -48,10 +49,21 @@ class FillTemplateTypeError(FillTemplateError):
     Attributes:
         message -- explanation of the error
     '''
-    def __init__(self, message="It should be a exist file path with docx or xlsx extension!"):
+    def __init__(self, message="It should be a file path with docx or xlsx extension!"):
         self.message = message
         super().__init__(self.message)
-        
+
+class FillTemplateNotExistError(FillTemplateError):
+    '''
+    Exception raised for errors in the input.
+    
+    Attributes:
+        message -- explanation of the error
+    '''
+    def __init__(self, message="It does not exist!"):
+        self.message = message
+        super().__init__(self.message)
+                 
 class FillOutputDirError(ParamError):
     '''
     Exception raised for errors in the input.
