@@ -1,17 +1,22 @@
 
 import os
 from pathlib import Path
+from typing import Union, Dict, Any
 import pandas as pd
 
 __all__ = [
-    "check_fill_datas_of_dict_type",
-    "check_template_type",
-    "check_dir",
+    "is_fill_row_type",
+    "is_fill_rows_type",
+    "is_template_type",
+    "is_dir",
+    "is_empty",
 ]
 
-def check_fill_datas_of_dict_type(value):
+
+def is_fill_row_type(value: Union[pd.Series, Dict[str, Any]]) -> bool:
     """
-    This function checks if the provided value is a dictionary, and each of its values is either a dictionary or a pandas Series.
+    This function checks if the provided value is Union[pd.Series, Dict[str, Any]].
+    In other words, it is a dictionary or a pandas Series.
     
     Args:
     value: The value to check.
@@ -19,25 +24,48 @@ def check_fill_datas_of_dict_type(value):
     Returns:
     bool: True if all conditions are met, False otherwise.
     
-    >>> check_fill_datas_of_dict_type({"a": {"b": 1}, "c": pd.Series([1,2,3])})
+    >>> is_fill_row_type(pd.Series([1, 2, 3]))
     True
-    >>> check_fill_datas_of_dict_type({"a": {"b": 1}, "c": [1,2,3]})
-    False
-    >>> check_fill_datas_of_dict_type({"a": 1})
-    False
-    >>> check_fill_datas_of_dict_type("a")
+    >>> is_fill_row_type({"a":1, "b":2, "c":3})
+    True
+    >>> is_fill_row_type(123)
     False
     
     """
     
-    if not isinstance(value, dict):
+    if isinstance(value, (pd.Series, Dict)):
+        return True
+    else:
         return False
-    for v in value.values():
-        if not isinstance(v, (dict, pd.Series)):
-            return False
-    return True
 
-def check_template_type(filename: str) -> bool:
+def is_fill_rows_type(value: Union[pd.DataFrame, Dict[str, Dict[str, Any]]]) -> bool:
+    """
+    This function checks if the provided value is Union[ pd.DataFrame, Dict[str, Dict[str, Any]] ].
+    In other words, it is a DataFrame or a two-layer nested dictionary.
+    
+    Args:
+    value: The value to check.
+
+    Returns:
+    bool: True if all conditions are met, False otherwise.
+    
+    >>> is_fill_rows_type(pd.DataFrame(data={"A": [1, 2, 3], "B": [4, 5, 6]}))
+    True
+    >>> is_fill_rows_type({"A": {"1": 1}, "B": {"2": 2}})
+    True
+    >>> is_fill_rows_type({"A": [1, 2, 3]})
+    False
+    """
+    
+    if isinstance(value, pd.DataFrame):
+        return True
+    elif isinstance(value, Dict):
+        if all(isinstance(val, Dict) for val in value.values()):
+            return True
+
+    return False
+
+def is_template_type(filename: str) -> bool:
     """
     This function checks if the provided file matches the allowed template types.
 
@@ -48,16 +76,16 @@ def check_template_type(filename: str) -> bool:
     bool: True if the file extension matches the allowed extensions, False otherwise.
 
 
-    >>> check_template_type("document.docx")
+    >>> is_template_type("document.docx")
     True
 
-    >>> check_template_type('c:\dev\doc.docx')
+    >>> is_template_type('c:\dev\doc.docx')
     True
 
-    >>> check_template_type("spreadsheet.xlsx")
+    >>> is_template_type("spreadsheet.xlsx")
     True
 
-    >>> check_template_type("image.png")
+    >>> is_template_type("image.png")
     False
     """
     allowed_extensions = ['.docx', '.xlsx']
@@ -65,7 +93,7 @@ def check_template_type(filename: str) -> bool:
 
     return file_extension in allowed_extensions
 
-def check_dir(dir: str) -> bool:
+def is_dir(dir: str) -> bool:
     '''
     Check if a given path is a directory.
     It accepts both relative and absolute paths.
@@ -76,15 +104,42 @@ def check_dir(dir: str) -> bool:
     Returns:
     bool: True if the path is a directory and exist, False otherwise.
 
-    >>> check_dir("/dev/filler")
+    >>> is_dir("/dev/filler")
     True
-    >>> check_dir("not_a_directory")
+    >>> is_dir("not_a_directory")
     False
-    >>> check_dir("src")
+    >>> is_dir("src")
     True
     
     '''
     return os.path.isdir(dir)
+
+def is_empty(value: Union[pd.DataFrame, pd.Series, Dict[str, Any]]) -> bool:
+    """
+    This function checks whether the provided value is empty.
+    
+    Args:
+    value: The value to check.
+
+    Returns:
+    bool: True if the value is empty, False otherwise.
+    
+    >>> is_empty(pd.DataFrame())
+    True
+    >>> is_empty(pd.Series(dtype='float64'))
+    True
+    >>> is_empty({})
+    True
+    >>> is_empty({"A":1, "B":2})
+    False
+    """
+    
+    if isinstance(value, (pd.DataFrame, pd.Series)):
+        return value.empty
+    if isinstance(value, Dict):
+        return not bool(value)
+        
+    return False 
 
 if __name__=='__main__':
 
