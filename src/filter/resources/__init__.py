@@ -1,5 +1,6 @@
-from .oto import Onefillone
+from .oto import RowTemplateFiller, RowsTemplateFiller
 
 __all__ = [
-    'Onefillone',
+    'RowTemplateFiller',
+    'RowsTemplateFiller',
 ]
