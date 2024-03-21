@@ -4,6 +4,7 @@ from ._error import (
     FillDataCollectionTypeError,
     FillDataCollectionEmptyError,
     FillTemplateTypeError,
+    FillTemplateNotExistError,
     FillOutputDirError,
 )
 
@@ -13,5 +14,6 @@ __all__ = [
     "FillDataCollectionTypeError",
     "FillDataCollectionEmptyError",
     'FillTemplateTypeError',
+    'FillTemplateNotExistError',
     'FillOutputDirError',   
 ]
