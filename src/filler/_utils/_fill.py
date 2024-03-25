@@ -3,23 +3,25 @@ from typing import Union
 import pandas as pd
 from openpyxl import load_workbook
 import re
+from ._utils import is_empty
 
 __all__ = [
     "fill_docx",
     "fill_xlsx",
 ]
 
+
 def fill_docx(
         data: Union[pd.Series, dict],
         template: str,
-        full_path:str,   
+        full_path: str,
 ):
     """
     Fill elements from 'data' into a docx template file, and save to the path specified by 'full_path'.
     :param data: Data to fill, can be of type pandas.Series or dict
     :param template: Path to the template file for data filling
     :param full_path: Path where the filled file is saved
-    
+
     """
 
     # Load the template file
@@ -35,10 +37,11 @@ def fill_docx(
     # Save to the specified path
     doc.save(full_path)
 
+
 def fill_xlsx(
     data: Union[pd.Series, dict],
     template: str,
-    full_path: str   
+    full_path: str
 ):
     """
     Fills elements from 'data' into a xlsx template file, and saves to the path specified by 'full_path'.
@@ -59,22 +62,26 @@ def fill_xlsx(
                 if isinstance(cell.value, str) and '{{' in cell.value:
                     # Extract the placeholder (e.g., 'A')
                     key = remove_after(
-                        remove_before(cell.value, '{{'), 
+                        remove_before(cell.value, '{{'),
                         "}}"
                     ).strip('{}')
                     # If the placeholder can be found in the data, replace the placeholder with the corresponding data
-                    if key in data:     
+                    if key in data:
                         if is_only_placeholder(cell.value):
-                            cell.value = data[key] 
-                        else:          
-                            placeholder =  '{{' + key + '}}'
-                            cell_value = str(cell.value)       
-                            cell.value = cell_value.replace(placeholder, str(data[key]))
+                            cell.value = data[key]
+                        else:
+                            placeholder = '{{' + key + '}}'
+                            replaced = '' if is_empty(
+                                data[key]) else str(data[key])
+                            cell_value = str(cell.value)
+                            cell.value = cell_value.replace(
+                                placeholder, replaced)
 
     # Save the result file
     book.save(full_path)
 
-def remove_before(s:str, spec:str):
+
+def remove_before(s: str, spec: str):
     """
     Returns a new string with all characters removed before 'spec'
     :param s: The original string
@@ -89,8 +96,9 @@ def remove_before(s:str, spec:str):
 
     # If 'spec' is found, return the part of 's' from 'spec' to the end
     return s[idx:]
-    
-def remove_after(s: str, spec: str)->str:
+
+
+def remove_after(s: str, spec: str) -> str:
     """
     Return a new string removed all chars after spec
     :param s: The original string
@@ -106,6 +114,7 @@ def remove_after(s: str, spec: str)->str:
     # Otherwise, return the part of s before and including spec
     return s[:idx + len(spec)]
 
+
 def is_only_placeholder(s: str) -> bool:
     """
     Check if a string s is a placeholder in the form of {{A}}
@@ -120,12 +129,12 @@ def is_only_placeholder(s: str) -> bool:
     >>> is_placeholder('{{AA}}BC')
     False
     """
-    pattern = r'^\{\{[\w\u4e00-\u9fa5]+\}\}$'    # This pattern matches strings like {{A}} exactly 
+    pattern = r'^\{\{[\w\u4e00-\u9fa5]+\}\}$'    # This pattern matches strings like {{A}} exactly
     match = re.fullmatch(pattern, s)
-    return match is not None        # If there is a match, the string is a placeholder, return True, otherwise, False
+    # If there is a match, the string is a placeholder, return True, otherwise, False
+    return match is not None
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-    
