@@ -3,6 +3,7 @@ from typing import Union
 import pandas as pd
 from openpyxl import load_workbook
 import re
+from ._utils import is_empty
 
 __all__ = [
     "fill_docx",
@@ -65,8 +66,11 @@ def fill_xlsx(data: Union[pd.Series, dict], template: str, full_path: str):
                             cell.value = data[key]
                         else:
                             placeholder = "{{" + key + "}}"
+                            replaced = "" if is_empty(
+                                data[key]) else str(data[key])
                             cell_value = str(cell.value)
-                            cell.value = cell_value.replace(placeholder, str(data[key]))
+                            cell.value = cell_value.replace(
+                                placeholder, replaced)
 
     # Save the result file
     book.save(full_path)
@@ -122,9 +126,8 @@ def is_only_placeholder(s: str) -> bool:
     """
     pattern = r"^\{\{[\w\u4e00-\u9fa5]+\}\}$"  # This pattern matches strings like {{A}} exactly
     match = re.fullmatch(pattern, s)
-    return (
-        match is not None
-    )  # If there is a match, the string is a placeholder, return True, otherwise, False
+    # If there is a match, the string is a placeholder, return True, otherwise, False
+    return match is not None
 
 
 if __name__ == "__main__":
