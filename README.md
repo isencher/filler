@@ -1,5 +1,7 @@
 # Filler
-<img src="src/filler/resources/images/filler.jpg" width="150" height="150" style="display: block; margin-left: auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px; border-radius: 50%;">
+<p align="center">
+  <img width="150" height="150" src="src/filler/resources/images/filler.jpg" style="border-radius: 50% / 30%;">
+</p>
 <h2 align="center">The Automated Filler</h2>
 
 
