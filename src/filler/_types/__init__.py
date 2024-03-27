@@ -6,6 +6,7 @@ from ._error import (
     FillTemplateTypeError,
     FillTemplateNotExistError,
     FillOutputDirError,
+    FillOutputNameError,
 )
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "FillTemplateTypeError",
     "FillTemplateNotExistError",
     "FillOutputDirError",
+    "FillOutputNameError",
 ]

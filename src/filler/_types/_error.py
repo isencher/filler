@@ -91,3 +91,7 @@ class FillOutputDirError(ParamError):
     def __init__(self, message="It should be a exist directory!"):
         self.message = message
         super().__init__(self.message)
+
+
+class FillOutputNameError(ParamError):
+    pass

@@ -7,6 +7,7 @@ from ._check import (
     is_template_type,
     is_dir,
     is_empty,
+    is_output_name,
     # gen_is_empty,
 )
 
@@ -22,5 +23,6 @@ __all__ = [
     "is_template_type",
     "is_dir",
     "is_empty",
+    "is_output_name",
     # "gen_is_empty",
 ]

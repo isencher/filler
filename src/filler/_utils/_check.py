@@ -9,6 +9,7 @@ __all__ = [
     "is_template_type",
     "is_dir",
     "is_empty",
+    "is_output_name",
 ]
 
 
@@ -143,6 +144,42 @@ def is_empty(value: Union[pd.DataFrame, pd.Series, Dict[str, Any]]) -> bool:
         return not bool(value)
 
     return False
+
+
+def is_output_name(path: str) -> bool:
+    """
+    Determine if the 'path' is a filename without an extension or a filename with a relative path, without an extension.
+
+    >>> is_output_name('a001')  # A filename without an extension
+    True
+    >>> is_output_name('a001.xlsx')  # A filename with an extension
+    False
+    >>> is_output_name('data/a001')  # A filename with a relative path and without an extension
+    True
+    >>> is_output_name('data/a001.xlsx')  # A filename with a relative path and with an extension
+    False
+    >>> is_output_name('/data/a001')  # An absolute path with a filename without an extension
+    False
+    >>> is_output_name(1)  # Not a string
+    False
+    """
+
+    # Check if 'path' is a string type
+    if not isinstance(path, str):
+        return False
+
+    # Create a pathlib.Path object
+    p = Path(path)
+
+    # Check if it is an absolute path
+    if os.path.isabs(path):
+        return False
+
+    # Check if the file extension is empty
+    if p.suffix != '':
+        return False
+
+    return True
 
 
 if __name__ == "__main__":
