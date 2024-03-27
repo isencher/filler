@@ -34,8 +34,7 @@ class FillDataCollectionTypeError(FillDataCollectionError):
         message="It should be either a DataFrame or a dict with keys as strings and values as Series or dicts!",
     ):
         self.message = message
-        super().__init__(
-            self.message)
+        super().__init__(self.message)
 
 
 class FillDataCollectionEmptyError(FillDataCollectionError):
@@ -48,8 +47,7 @@ class FillDataCollectionEmptyError(FillDataCollectionError):
 
     def __init__(self, message="It should not be empty!"):
         self.message = message
-        super().__init__(
-            self.message)
+        super().__init__(self.message)
 
 
 class FillTemplateError(ParamError):
@@ -66,8 +64,7 @@ class FillTemplateTypeError(FillTemplateError):
 
     def __init__(self, message="It should be a file path with docx or xlsx extension!"):
         self.message = message
-        super().__init__(
-            self.message)
+        super().__init__(self.message)
 
 
 class FillTemplateNotExistError(FillTemplateError):
@@ -80,8 +77,7 @@ class FillTemplateNotExistError(FillTemplateError):
 
     def __init__(self, message="It does not exist!"):
         self.message = message
-        super().__init__(
-            self.message)
+        super().__init__(self.message)
 
 
 class FillOutputDirError(ParamError):
@@ -94,5 +90,4 @@ class FillOutputDirError(ParamError):
 
     def __init__(self, message="It should be a exist directory!"):
         self.message = message
-        super().__init__(
-            self.message)
+        super().__init__(self.message)
