@@ -66,11 +66,9 @@ def fill_xlsx(data: Union[pd.Series, dict], template: str, full_path: str):
                             cell.value = data[key]
                         else:
                             placeholder = "{{" + key + "}}"
-                            replaced = "" if is_empty(
-                                data[key]) else str(data[key])
+                            replaced = "" if is_empty(data[key]) else str(data[key])
                             cell_value = str(cell.value)
-                            cell.value = cell_value.replace(
-                                placeholder, replaced)
+                            cell.value = cell_value.replace(placeholder, replaced)
 
     # Save the result file
     book.save(full_path)

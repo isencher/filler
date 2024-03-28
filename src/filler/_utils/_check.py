@@ -176,7 +176,7 @@ def is_output_name(path: str) -> bool:
         return False
 
     # Check if the file extension is empty
-    if p.suffix != '':
+    if p.suffix != "":
         return False
 
     return True

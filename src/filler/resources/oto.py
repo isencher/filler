@@ -48,8 +48,7 @@ class RowTemplateFiller:
                 "It is either a Series or a dictionary!"
             )
         if is_empty(data):
-            raise FillDataCollectionEmptyError(
-                "the value of data parameter is empty!")
+            raise FillDataCollectionEmptyError("the value of data parameter is empty!")
 
         # check template param
         check_template(template)
@@ -68,7 +67,7 @@ class RowTemplateFiller:
 
         self.filler = fillers[self.extension]
 
-        self._output_name = 'a001'
+        self._output_name = "a001"
 
     @property
     def output_name(self) -> str:
@@ -78,14 +77,13 @@ class RowTemplateFiller:
     def output_name(self, value: str) -> str:
         if not is_output_name(value):
             raise FillOutputNameError(
-                'The value of output_name parameter is incorrect!'
-                'It should be a file name without an extension, with or without a relative directory!'
+                "The value of output_name parameter is incorrect!"
+                "It should be a file name without an extension, with or without a relative directory!"
             )
         self._output_name = value
 
     def fill(self):
-        output_path = path.join(
-            self.output_dir, f"{self.output_name}.{self.extension}")
+        output_path = path.join(self.output_dir, f"{self.output_name}.{self.extension}")
         self.filler(self.data, self.template, output_path)
 
 

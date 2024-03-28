@@ -83,4 +83,5 @@ def rand_float(start: float = -1, end: float = 1, point: int = 2) -> float:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
