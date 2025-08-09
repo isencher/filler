@@ -1,7 +1,19 @@
+[project]
+name = "filler"
+version = "0.0.1"
+description = "The official Python library for the filler API"
+author = [
+    {name = "sencher", email = "sencher@163.com"},
+]
+license = "MIT"
+
+[tool.hatch.build.targets.sdist]
+ignore-vcs = true
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
